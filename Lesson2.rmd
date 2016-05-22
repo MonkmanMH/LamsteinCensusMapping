@@ -1,0 +1,92 @@
+---
+title: 'Lesson 2: Mapping State Data'
+author: "Martin Monkman"
+date: "May 21, 2016"
+output: html_document
+---
+
+# Ari Lamstein's U.S. Census Mapping in R Course
+
+## Lesson 2: Mapping State Data
+
+Install the packages, and load the data `df_pop_state` into the workspace.
+
+```{r}
+
+# install and load the packages
+install.packages(c("choroplethr", "choroplethrMaps"))
+library(choroplethr)
+ 
+data(df_pop_state)
+head(df_pop_state)
+
+```
+
+## Map 1 - State Population
+
+The first map is a choropleth of state populations.
+
+```{r cars}
+
+state_choropleth(df_pop_state)
+
+```
+
+There are other options, viewed through `?state_choropleth`. More on that later.
+
+## Map 2 - Exercise - Per-Capita Income by State
+
+Load the more comprehensive dataset `df_state_demographics`, and assign the per capita income values to the variable `value`.
+
+```{r}
+
+
+data(df_state_demographics)
+colnames(df_state_demographics)
+
+df_state_demographics$value = df_state_demographics$per_capita_income
+
+state_choropleth(df_state_demographics)
+
+```
+
+## Map 3 - Homework - Median Rent by State
+
+
+```{r}
+
+df_state_demographics$value = df_state_demographics$median_rent
+
+state_choropleth(df_state_demographics)
+
+
+```
+
+
+### Map 3a (add title etc)
+
+Add title, legend caption, constrain to 6 colors
+
+```{r}
+
+state_choropleth(df_state_demographics, title = "Median Rent by State",
+                 legend = "Median Rent ($)", num_colors = 6)
+
+
+```
+
+
+### Map 3a, zoomed into west coast states 
+
+Seven states, seven colors--so each one gets its own color in the legend.
+
+```{r}
+
+state_choropleth(df_state_demographics, title = "Median Rent by State: Western Region",
+                 legend = "Median Rent ($)", num_colors = 7,
+                 zoom = c("washington", "oregon", "california",
+                          "idaho", "nevada", "utah", "arizona"))
+
+
+```
+
