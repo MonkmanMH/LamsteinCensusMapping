@@ -11,10 +11,12 @@ output: html_document
 
 Install the packages, and load the data `df_pop_state` into the workspace.
 
-```{r}
+```{r message = FALSE}
+
+setwd("C:/@data/GitHub/LamsteinCensusMapping")
 
 # install and load the packages
-install.packages(c("choroplethr", "choroplethrMaps"))
+# install.packages(c("choroplethr", "choroplethrMaps"))
 library(choroplethr)
  
 data(df_pop_state)
