@@ -1,0 +1,108 @@
+---
+title: 'Lesson 3: Mapping County Data'
+author: "Martin Monkman"
+date: "May 22, 2016"
+output: html_document
+---
+
+# Ari Lamstein's U.S. Census Mapping in R Course
+
+## Lesson 3: Mapping County Data
+
+Install the packages, and load the data `df_pop_state` into the workspace.
+
+```{r message = FALSE}
+
+setwd("C:/@data/GitHub/LamsteinCensusMapping")
+
+# install and load the packages
+# install.packages(c("choroplethr", "choroplethrMaps"))
+library(choroplethr)
+ 
+data(df_pop_county)
+head(df_pop_county)
+
+```
+
+## Map 1 - State Population
+
+The first map is a choropleth of state populations.
+
+```{r}
+
+county_choropleth(df_pop_county)
+
+```
+
+There are other options, viewed through `?state_choropleth`. More on that later.
+
+## Map 2 - Exercise - Per-Capita Income by County
+
+Load the more comprehensive dataset `df_state_demographics`, and assign the per capita income values to the variable `value`.
+
+```{r}
+
+data(df_county_demographics)
+
+colnames(df_county_demographics)
+
+df_county_demographics$value = df_county_demographics$per_capita_income
+
+county_choropleth(df_county_demographics)
+
+```
+
+## Map 3 - Homework - Median Rent by County
+
+
+```{r}
+
+df_county_demographics$value = df_county_demographics$median_rent
+
+county_choropleth(df_county_demographics)
+
+
+```
+
+
+### Map 3a (add title etc)
+
+Add title, legend caption, constrain to 6 colors
+
+```{r}
+
+county_choropleth(df_county_demographics, title = "Median Rent by County",
+                 legend = "Median Rent ($)", num_colors = 6)
+
+
+```
+
+
+### Map 3a, zoomed into Idaho 
+
+In lesson #2 we saw that Idaho had the lowest median rent of the seven western states that were plotted. Here's a chance to take a closer look:
+
+```{r}
+
+county_choropleth(df_county_demographics, title = "Median Rent by County: Idaho",
+                 legend = "Median Rent ($)", num_colors = 6,
+                 state_zoom = c("idaho"))
+
+
+```
+
+
+### Map 3b, zoomed into Washington 
+
+And a map of Washington.
+
+```{r}
+
+county_choropleth(df_county_demographics, title = "Median Rent by County: Washington",
+                 legend = "Median Rent ($)", num_colors = 6,
+                 state_zoom = c("washington"))
+
+
+```
+
+No surprise: the densely populated Seattle-Tacoma area, including the western side of Puget Sound, have the highest median rents in the state.
