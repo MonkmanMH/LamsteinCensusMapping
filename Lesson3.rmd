@@ -92,6 +92,26 @@ county_choropleth(df_county_demographics, title = "Median Rent by County: Idaho"
 ```
 
 
+### Map 3a.02, add a reference map to Idaho zoom 
+
+_Revision_
+
+After tweeting the above, Ari Lamstein tweeted back ""
+
+So after a quick google search, I found [Combining Choropleth Maps and Reference Maps in R](http://www.arilamstein.com/blog/2015/09/30/combining-choropleth-maps-and-reference-maps-in-r/) on Ari's website.
+
+By simply adding the parameter `reference_map = TRUE`, the choropleth now has a reference map underlying it. Easy.
+
+```{r}
+
+county_choropleth(df_county_demographics, title = "Median Rent by County: Idaho",
+                 legend = "Median Rent ($)", num_colors = 6,
+                 state_zoom = c("idaho"),
+                 reference_map = TRUE)
+
+
+```
+
 ### Map 3b, zoomed into Washington 
 
 And a map of Washington.
