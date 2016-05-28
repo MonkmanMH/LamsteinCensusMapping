@@ -1,0 +1,140 @@
+---
+title: 'Lesson 5: Mapping Historic Data'
+author: "Martin Monkman"
+date: "May 28, 2016"
+output: html_document
+---
+
+# Ari Lamstein's U.S. Census Mapping in R Course
+
+## Lesson 5: Mapping Historic Data
+
+Enter the Census Bureau API key.
+
+```{r message = FALSE}
+
+setwd("C:/@data/GitHub/LamsteinCensusMapping")
+
+# install and load the packages
+# install.packages("devtools")
+
+library(acs)
+api.key.install("<numberhere>", file = "key.rda") 
+
+
+```
+
+## Map 1 - State Populations, 2010
+
+The first map is a choropleth of the state population in 2010.
+
+```{r}
+
+library(choroplethr)
+
+df_2010_demographics = get_state_demographics(2010)
+df_2010_demographics$value = df_2010_demographics$total_population
+
+state_choropleth(df_2010_demographics, 
+                 title  = "2010 State Population Estimates",
+                 legend = "Population")
+
+```
+
+## Map 2 - County Populations, Texas, 2011
+
+
+```{r}
+
+df_2011_demographics = get_county_demographics(2011)
+df_2011_demographics$value = df_2011_demographics$percent_hispanic
+
+county_choropleth(df_2011_demographics,
+                  title      = "Texas 2011 County\nPercent Hispanic",
+                  legend     = "Percent Hispanic",
+                  state_zoom = "texas")
+
+
+```
+
+
+## Homework - Mapping San Francisco demographics by ZIP code, 2011
+
+Mapping median rents in the San Francisco County, using the 2011 ACS.
+
+The final version of the map adds a reference map, and divides the rents into quintiles.
+
+
+```{r}
+
+library(choroplethrZip)
+
+df_zip_demographics2011 <- get_zip_demographics(endyear = 2011, span = 5)
+colnames(df_zip_demographics2011)
+
+
+df_zip_demographics2011$value = df_zip_demographics2011$median_rent
+colnames(df_zip_demographics2011)
+
+zip_choropleth(df_zip_demographics2011, county_zoom=6075)
+
+
+zip_choropleth(df_zip_demographics2011, county_zoom=6075,
+               title = "Median Rent by ZIP Code, 2011\nSan Francisco County",
+               legend = "Median Rent ($)",
+               num_colors = 5,
+               reference_map = TRUE)
+
+
+```
+
+
+
+
+## Homework #1 & 2
+
+
+Homework #1: Use google to find the FIPS code of Los Angeles County.
+
+According to [this source](http://county-codes.findthedata.com/l/203/Los-Angeles-County-CA), it's 06037.
+
+Homework #2: Use df_zip_demographics and zip_choropleth to map some demographic statistic of the ZCTAs in Los Angeles county. Tweet the resulting image to me (@AriLamstein) with the hashtag #censuscourse.
+
+Homework #3: Combine your choropleth map with a google map. Articulate one pro and one con with adding the reference map.
+
+
+```{r}
+
+df_zip_demographics$value = df_zip_demographics$median_rent 
+
+zip_choropleth(df_zip_demographics, county_zoom=06037)
+
+
+```
+
+
+### add title etc
+
+Add title, legend caption
+
+```{r}
+
+zip_choropleth(df_zip_demographics, county_zoom=06037,
+               title = "Median Rent by ZIP Code\nLos Angeles County",
+               legend = "Median Rent ($)")
+
+
+zip_choropleth(df_zip_demographics, county_zoom=06037,
+               title = "Median Rent by ZIP Code\nLos Angeles County",
+               legend = "Median Rent ($)",
+               reference_map = TRUE)
+
+
+
+```
+
+Pros and cons of reference maps:
+
+* Pro - Can see the geography and its relationship with values (e.g. Catalina Island, the coast [and in particular the valuable properties in Malibu])
+
+* Con - Underlying image can obscure the differences between ZIP code boundaries

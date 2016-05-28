@@ -1,0 +1,120 @@
+---
+title: 'Lesson 4: Mapping ZIP Codes'
+author: "Martin Monkman"
+date: "May 25, 2016"
+output: html_document
+---
+
+# Ari Lamstein's U.S. Census Mapping in R Course
+
+## Lesson 4: Mapping ZIP Codes
+
+Install the packages, and load the data `df_pop_state` into the workspace.
+
+```{r message = FALSE}
+
+setwd("C:/@data/GitHub/LamsteinCensusMapping")
+
+# install and load the packages
+install.packages("devtools")
+library(devtools)
+
+install_github("arilamstein/choroplethrZip@v1.5.0")
+library(choroplethrZip)
+ 
+data(df_pop_zip)
+head(df_pop_zip)
+
+```
+
+## Map 1 - Population of New York State by ZIP
+
+The first map is a choropleth of the state population by ZIP code.
+
+```{r}
+
+zip_choropleth(df_pop_zip, state_zoom="new york") 
+
+
+```
+
+## Map 2 - Population of Manhattan by ZIP
+
+The first map is a choropleth of state populations. The second variant adds a reference map upderneath.
+
+Hey look, nobody lives in Central Park.
+
+```{r}
+
+
+zip_choropleth(df_pop_zip, county_zoom=36061)
+
+
+zip_choropleth(df_pop_zip, county_zoom=36061, reference_map=TRUE)
+
+```
+
+There are other options, viewed through `?state_choropleth`. More on that later.
+
+## Map 2 - Map the per-capita income of each ZCTA in Manhattan
+
+Load the more comprehensive dataset `df_zip_demographics`, and assign the per capita income values to the variable `value`.
+
+```{r}
+
+data(df_zip_demographics)
+colnames(df_zip_demographics)
+
+
+df_zip_demographics$value = df_zip_demographics$per_capita_income 
+zip_choropleth(df_zip_demographics, county_zoom=36061)
+
+```
+
+## Homework #1 & 2
+
+
+Homework #1: Use google to find the FIPS code of Los Angeles County.
+
+According to [this source](http://county-codes.findthedata.com/l/203/Los-Angeles-County-CA), it's 06037.
+
+Homework #2: Use df_zip_demographics and zip_choropleth to map some demographic statistic of the ZCTAs in Los Angeles county. Tweet the resulting image to me (@AriLamstein) with the hashtag #censuscourse.
+
+Homework #3: Combine your choropleth map with a google map. Articulate one pro and one con with adding the reference map.
+
+
+```{r}
+
+df_zip_demographics$value = df_zip_demographics$median_rent 
+
+zip_choropleth(df_zip_demographics, county_zoom=06037)
+
+
+```
+
+
+### add title etc
+
+Add title, legend caption
+
+```{r}
+
+zip_choropleth(df_zip_demographics, county_zoom=06037,
+               title = "Median Rent by ZIP Code\nLos Angeles County",
+               legend = "Median Rent ($)")
+
+
+zip_choropleth(df_zip_demographics, county_zoom=06037,
+               title = "Median Rent by ZIP Code\nLos Angeles County",
+               legend = "Median Rent ($)",
+               reference_map = TRUE)
+
+
+
+```
+
+Pros and cons of reference maps:
+
+* Pro - Can see the geography and its relationship with values (e.g. Catalina Island, the coast [and in particular the valuable properties in Malibu])
+
+* Con - Underlying image can obscure the differences between ZIP code boundaries
